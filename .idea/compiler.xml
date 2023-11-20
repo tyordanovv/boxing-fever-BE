@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="boxing-fever-BE" />
         <module name="boxing-fever-server" />
       </profile>
     </annotationProcessing>
@@ -16,6 +17,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="boxing-fever-BE" options="-parameters" />
       <module name="boxing-fever-server" options="-parameters" />
       <module name="springboot-blog-rest-api" options="-parameters" />
     </option>
