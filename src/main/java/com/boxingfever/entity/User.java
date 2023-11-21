@@ -1,6 +1,7 @@
 package com.boxingfever.entity;
 
 import com.boxingfever.types.TrainingClassEnums;
+import com.boxingfever.types.UserPlanEnums;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class User {
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
-    private TrainingClassEnums planType;
+    private UserPlanEnums planType;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
