@@ -9,6 +9,7 @@ import com.boxingfever.repository.RoleRepository;
 import com.boxingfever.repository.UserRepository;
 import com.boxingfever.security.JwtTokenProvider;
 import com.boxingfever.service.AuthService;
+import com.boxingfever.types.UserPlanEnums;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -66,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
         User user = new User();
         user.setName(registerRequest.getName());
         user.setEmail(registerRequest.getEmail());
+        user.setPlanType(UserPlanEnums.STANDARD);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         System.out.println("register AuthServiceImpl3");
 
