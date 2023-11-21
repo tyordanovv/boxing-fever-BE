@@ -22,7 +22,7 @@ public class ClassServiceImpl implements ClassService {
     public void createAndSaveClass(NewClassRequest newClassRequest) {
         validateClassRequest(newClassRequest);
         TrainingClass trainingClass = TrainingClass.builder()
-                .className(newClassRequest.getClassName())
+                .name(newClassRequest.getClassName())
                 .category(newClassRequest.getCategory())
                 .description(newClassRequest.getDescription())
                 .trainers((Set<Trainer>) newClassRequest.getTrainers())
@@ -38,7 +38,7 @@ public class ClassServiceImpl implements ClassService {
                 .orElseThrow(() -> new RuntimeException("Class not found"));
 
         // Update the existing class with the new information
-        existingClass.setClassName(updateClassRequest.getNewClassName());
+        existingClass.setName(updateClassRequest.getNewClassName());
         existingClass.setCategory(updateClassRequest.getCategory());
         existingClass.setDescription(updateClassRequest.getDescription());
         existingClass.setPlace(updateClassRequest.getPlace());

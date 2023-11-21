@@ -22,7 +22,7 @@ public class TrainingClass {
     private Long id;
 
     @NotNull
-    private String className;
+    private String name;
 
     private String place;
 
