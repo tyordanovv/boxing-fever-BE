@@ -8,7 +8,7 @@
 		<version>3.0.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.springboot.blog</groupId>
+	<groupId>com.boxing-fever.be</groupId>
 	<artifactId>boxing-fever-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>boxing-fever-server</name>

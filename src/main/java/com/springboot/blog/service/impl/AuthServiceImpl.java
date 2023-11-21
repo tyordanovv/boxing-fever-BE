@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
     public String login(LoginDto loginDto) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getEmail(), loginDto.getPassword()));
+                loginDto.email(), loginDto.password()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -58,22 +58,21 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("register AuthServiceImpl");
 
         // add check for email exists in database
-        if(userRepository.existsByEmail(registerRequest.getEmail())){
+        if(userRepository.existsByEmail(registerRequest.email())){
             throw new APIException(HttpStatus.BAD_REQUEST, "Email is already exists!.");
         }
-        System.out.println("register AuthServiceImpl2");
 
         User user = new User();
-        user.setName(registerRequest.getName());
-        user.setEmail(registerRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        System.out.println("register AuthServiceImpl3");
+        user.setFirstName(registerRequest.firstName());
+        user.setLastName(registerRequest.lastName());
+        user.setAddress(registerRequest.address());
+        user.setEmail(registerRequest.email());
+        user.setPassword(passwordEncoder.encode(registerRequest.password()));
 
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByName("ROLE_USER").get();
         roles.add(userRole);
         user.setRoles(roles);
-        System.out.println("register AuthServiceImpl4");
 
         userRepository.save(user);
 
