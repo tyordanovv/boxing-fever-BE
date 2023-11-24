@@ -1,6 +1,6 @@
 package com.boxingfever.service.impl;
 
-import com.boxingfever.api.UserInfoDto;
+import com.boxingfever.api.user.UserInfoDto;
 import com.boxingfever.entity.Role;
 import com.boxingfever.entity.User;
 import com.boxingfever.exception.APIException;
@@ -45,6 +45,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "User " + id + " is not found!"));
 
         return user.toUserInfoDto();
+    }
+
+    @Override
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "User " + id + " is not found!"));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.boxingfever.controller;
 
 
-import com.boxingfever.api.UserInfoDto;
+import com.boxingfever.api.user.UserInfoDto;
 import com.boxingfever.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

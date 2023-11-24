@@ -1,6 +1,6 @@
 package com.boxingfever.exception;
 
-import com.boxingfever.api.ErrorDetails;
+import com.boxingfever.api.util.ErrorDetails;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

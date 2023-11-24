@@ -19,6 +19,7 @@ public class TrainingClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "class_id")
     private Long id;
 
     @NotNull

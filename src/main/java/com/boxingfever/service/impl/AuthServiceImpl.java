@@ -3,13 +3,12 @@ package com.boxingfever.service.impl;
 import com.boxingfever.entity.Role;
 import com.boxingfever.entity.User;
 import com.boxingfever.exception.APIException;
-import com.boxingfever.api.LoginDto;
-import com.boxingfever.api.RegisterRequest;
+import com.boxingfever.api.user.LoginDto;
+import com.boxingfever.api.user.RegisterRequest;
 import com.boxingfever.repository.RoleRepository;
 import com.boxingfever.repository.UserRepository;
 import com.boxingfever.security.JwtTokenProvider;
 import com.boxingfever.service.AuthService;
-import com.boxingfever.types.UserPlanEnums;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,8 +55,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String register(RegisterRequest registerRequest) {
-        System.out.println("register AuthServiceImpl");
-
         // add check for email exists in database
         if(userRepository.existsByEmail(registerRequest.email())){
             throw new APIException(HttpStatus.BAD_REQUEST, "Email is already exists!.");

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -20,6 +22,7 @@ public class Session {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "session_id")
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -37,22 +40,35 @@ public class Session {
     @Column(name = "session_date", nullable = false)
     private Date sessionDate;
 
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     @JoinTable(
-            name = "session_student",
-            joinColumns = @JoinColumn(name = "session_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private Set<User> students;
+            name = "session_user",
+            joinColumns = { @JoinColumn(name = "session_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") })
+    private Set<User> users = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "session_trainer",
-            joinColumns = @JoinColumn(name = "sesion_id"),
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "session_trainer",
+            joinColumns = @JoinColumn(name = "session_id"),
             inverseJoinColumns = @JoinColumn(name = "trainer_id"))
     private Set<Trainer> trainers = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "class_id")
-    private TrainingClass  aClass;
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            optional = false)
+    @JoinColumn(
+            name = "class_id",
+            nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private TrainingClass aClass;
+
+    public void addUser(User user){
+        users.add(user);
+    }
 
 }

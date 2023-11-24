@@ -1,8 +1,8 @@
 package com.boxingfever.controller;
 
-import com.boxingfever.api.JWTAuthResponse;
-import com.boxingfever.api.LoginDto;
-import com.boxingfever.api.RegisterRequest;
+import com.boxingfever.api.util.JWTAuthResponse;
+import com.boxingfever.api.user.LoginDto;
+import com.boxingfever.api.user.RegisterRequest;
 import com.boxingfever.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // Build Login REST API
     @PostMapping(value = {"/login"})
     public ResponseEntity<JWTAuthResponse> login(@RequestBody LoginDto loginDto){
         String token = authService.login(loginDto);
@@ -32,7 +31,6 @@ public class AuthController {
         return ResponseEntity.ok(jwtAuthResponse);
     }
 
-    // Build Register REST API
     @PostMapping(value = {"/register"})
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest){
         String response = authService.register(registerRequest);
