@@ -60,6 +60,6 @@ public class User {
                 .map(Role::getName)
                 .collect(Collectors.toSet());
 
-        return new UserInfoDto(firstName, lastName, address, email, roleNames);
+        return new UserInfoDto(id, firstName, lastName, address, email, roleNames);
     }
 }

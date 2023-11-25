@@ -1,5 +1,6 @@
 package com.boxingfever.service.impl;
 
+import com.boxingfever.api.util.JWTAuthResponse;
 import com.boxingfever.entity.Role;
 import com.boxingfever.entity.User;
 import com.boxingfever.exception.APIException;
@@ -13,9 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,18 +46,35 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(LoginDto loginDto) {
+    public JWTAuthResponse login(LoginDto loginDto) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.email(), loginDto.password()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return jwtTokenProvider.generateToken(authentication);
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        String token = jwtTokenProvider.generateToken(authentication);
+        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse(null);
+
+        User user = userRepository.findByEmail(loginDto.email()).get();
+
+        JWTAuthResponse response = new JWTAuthResponse();
+
+        response.setAccessToken(token);
+        response.setRole(role);
+        response.setUser(user.toUserInfoDto());
+
+        return response;
     }
 
     @Override
-    public String register(RegisterRequest registerRequest) {
+    public void register(RegisterRequest registerRequest) {
         // add check for email exists in database
         if(userRepository.existsByEmail(registerRequest.email())){
             throw new APIException(HttpStatus.BAD_REQUEST, "Email is already exists!.");
@@ -73,7 +93,5 @@ public class AuthServiceImpl implements AuthService {
         user.setRoles(roles);
 
         userRepository.save(user);
-
-        return "Registration was successful";
     }
 }

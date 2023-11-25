@@ -23,17 +23,14 @@ public class AuthController {
 
     @PostMapping(value = {"/login"})
     public ResponseEntity<JWTAuthResponse> login(@RequestBody LoginDto loginDto){
-        String token = authService.login(loginDto);
+        JWTAuthResponse response = authService.login(loginDto);
 
-        JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
-        jwtAuthResponse.setAccessToken(token);
-
-        return ResponseEntity.ok(jwtAuthResponse);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = {"/register"})
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest){
-        String response = authService.register(registerRequest);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest){
+        authService.register(registerRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
