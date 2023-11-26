@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -44,22 +46,21 @@ public class User {
     @JsonIgnore
     private Set<Session> sessions = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            optional = false)
+    @JoinColumn(
+            name = "role_id",
+            nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Role role;
 
     public void addSession(Session session){
         this.sessions.add(session);
     }
 
     public UserInfoDto toUserInfoDto() {
-        Set<String> roleNames = roles.stream()
-                .map(Role::getName)
-                .collect(Collectors.toSet());
 
-        return new UserInfoDto(id, firstName, lastName, address, email, roleNames);
+        return new UserInfoDto(id, firstName, lastName, address, email, role.getName());
     }
 }

@@ -59,7 +59,6 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
         config.addAllowedOrigin("*"); // You may want to restrict this to specific origins
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
@@ -80,9 +79,9 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
 
                 )
-                .exceptionHandling( exception -> exception
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                )
+//                .exceptionHandling( exception -> exception
+//                        .authenticationEntryPoint(authenticationEntryPoint)
+//                )
                 .sessionManagement( session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );

@@ -1,6 +1,7 @@
 package com.boxingfever.controller;
 
 
+import com.boxingfever.api.user.UpdateUserRequest;
 import com.boxingfever.api.user.UserInfoDto;
 import com.boxingfever.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public ResponseEntity<UserInfoDto> getUser(@RequestBody Long id){
+    @GetMapping("{id}")
+    public ResponseEntity<UserInfoDto> getUser(@PathVariable Long id){
         UserInfoDto response = userService.getUserInfo(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -33,9 +34,15 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping()
-    public ResponseEntity<?> deleteUser(@RequestBody Long id){
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequest request){
+        userService.updateUser(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

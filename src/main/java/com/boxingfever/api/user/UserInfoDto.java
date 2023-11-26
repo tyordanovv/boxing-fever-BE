@@ -8,5 +8,5 @@ public record UserInfoDto(
         String lastName,
         String address,
         String email,
-        Set<String> roleName
+        String roleName
 ) {}

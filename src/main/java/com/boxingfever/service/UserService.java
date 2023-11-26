@@ -1,5 +1,6 @@
 package com.boxingfever.service;
 
+import com.boxingfever.api.user.UpdateUserRequest;
 import com.boxingfever.api.user.UserInfoDto;
 import com.boxingfever.entity.User;
 
@@ -10,4 +11,6 @@ public interface UserService {
     UserInfoDto getUserInfo(Long id);
     User getUser(Long id);
     void deleteUser(Long id);
+
+    void updateUser(UpdateUserRequest request);
 }
