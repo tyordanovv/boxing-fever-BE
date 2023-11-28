@@ -1,15 +1,11 @@
 package com.boxingfever.api.classes;
 
-import com.boxingfever.entity.Session;
 import com.boxingfever.entity.Trainer;
-import com.boxingfever.entity.TrainingClass;
 import com.boxingfever.types.TrainingClassEnums;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -18,9 +14,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NewClassRequest {
+public class TrainingClassDto {
 
-    private String className;
+
+    private Long id;
+    private String name;
 
     private String place;
 
@@ -29,7 +27,6 @@ public class NewClassRequest {
     private String description;
 
     private TrainingClassEnums category;
-
-    private List<Trainer> trainers;
+    private Set<Long> trainers = new HashSet<>();
 
 }

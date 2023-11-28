@@ -18,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "trainers")
-public class Trainer {
+public class  Trainer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

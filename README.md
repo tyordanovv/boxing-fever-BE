@@ -1,18 +1,15 @@
-**Database Connection done easily**
-open gitbash -> you should be located in the folder of the project
-* docker-compose up -d    
-now the container is running to check:
-+ docker-compose ps
-+ or: docker ps  
-okay now to see the tables use a gui tool like myaql desk 
-or with these commands:
-+ docker exec -it boxing-fever-db bash   
-then to enter sql:
-+ docker exec -it boxing-fever-db mysql -u user -p
-+ after p enter the password  
+Hey..
+in case you are wondering how this app works.. it is pretty simple.  
+**Structure** : It is only built on one service as you see
+To start the app locally. under the pic you can find the instructions
+
+![img.png](img.png)  
 
 
+1. download docker desktop and run it
+2. open command line and type :
+   ***docker build -t boxing-fever .***
+3. again DO NOT forget the . at the end please
+4. co to your command line again type ***cd ./docker-compose***
+5. then type ***docker-compose up***
 
-
-*To shutdown:*  
-docker-compose down

@@ -2,14 +2,23 @@ version: '3.1'
 
 services:
   boxing-fever-db:
-    image: mysql:8.2.0
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: boxing-fever
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: RnfWJHmL9u
+      MYSQL_DATABASE: sql11664765
+      MYSQL_USER: sql11664765
+      MYSQL_PASSWORD: RnfWJHmL9u
     ports:
       - "3306:3306"
     volumes:
       - ./docker/mysql/init-scripts:/docker-entrypoint-initdb.d
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+
+  app:
+    image: boxing-fever
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - boxing-fever-db

@@ -48,7 +48,6 @@ public class Session {
             joinColumns = { @JoinColumn(name = "session_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<User> users = new HashSet<>();
-
     @ManyToMany(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)

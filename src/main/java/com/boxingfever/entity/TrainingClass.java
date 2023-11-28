@@ -22,16 +22,19 @@ public class TrainingClass {
     @Column(name = "class_id")
     private Long id;
 
-    @NotNull
+    @Column(name = "class_name", nullable = false)
     private String name;
 
+    @Column(name = "adress", nullable = true)
     private String place;
 
+    @Column(name = "duration", nullable = false)
     private int durationInMinutes;
 
-    @NotNull
+    @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "category", nullable = false)
     @Enumerated(EnumType.STRING)
     private TrainingClassEnums category;
 
