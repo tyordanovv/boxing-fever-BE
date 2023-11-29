@@ -27,6 +27,6 @@ public class TrainingClassDto {
     private String description;
 
     private TrainingClassEnums category;
-    private Set<Long> trainers = new HashSet<>();
+    private Set<Long> trainersIds = new HashSet<>();
 
 }

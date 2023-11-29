@@ -2,7 +2,6 @@ package com.boxingfever.entity;
 
 import com.boxingfever.types.TrainingClassEnums;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.HashSet;
@@ -23,12 +22,12 @@ public class TrainingClass {
     private Long id;
 
     @Column(name = "class_name", nullable = false)
-    private String name;
+    private String className;
 
-    @Column(name = "adress", nullable = true)
+    @Column(name = "address", nullable = true)
     private String place;
 
-    @Column(name = "duration", nullable = false)
+    @Column(name = "duration_in_minutes", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int durationInMinutes;
 
     @Column(name = "description", nullable = false)
@@ -38,11 +37,13 @@ public class TrainingClass {
     @Enumerated(EnumType.STRING)
     private TrainingClassEnums category;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "class_trainer",
-            joinColumns = @JoinColumn(name = "class_id"),
-            inverseJoinColumns = @JoinColumn(name = "trainer_id"))
-    private Set<Trainer> trainers = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(
+            name = "class_trainers",
+            joinColumns = @JoinColumn(name = "class_id")
+    )
+    @Column(name = "trainer_id")
+    private Set<Long> trainers = new HashSet<>();
 
 
 }

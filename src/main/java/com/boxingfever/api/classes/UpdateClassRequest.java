@@ -20,5 +20,5 @@ public class UpdateClassRequest {
     private String place;
     private String description;
     private TrainingClassEnums category;
-    private Set<Trainer> trainers = new HashSet<>(); //TODO change from Set of Long which will contain user ids
+    private Set<Long> trainers = new HashSet<>();
 }

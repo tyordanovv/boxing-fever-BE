@@ -28,8 +28,8 @@ public class NewClassRequest {
 
     private String description;
 
-    private TrainingClassEnums category;
+    private String category;
 
-    private List<Trainer> trainers;
+    private Set<Long> trainers;
 
 }

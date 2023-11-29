@@ -92,7 +92,7 @@ public class SessionServiceImpl implements SessionService {
                 session.getTrainers().stream()
                         .map(Trainer::convertTrainerToDto)
                         .collect(Collectors.toList()),
-                session.getAClass().getName()
+                session.getAClass().getClassName()
         );
     }
 }

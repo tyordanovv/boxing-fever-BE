@@ -5,23 +5,17 @@ import com.boxingfever.entity.Trainer;
 import com.boxingfever.exception.APIException;
 import com.boxingfever.repository.TrainerRepository;
 import com.boxingfever.service.TrainerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class TrainerServiceImpl implements TrainerService {
-    private final TrainerRepository trainerRepository;
-
-    public TrainerServiceImpl (
-            TrainerRepository trainerRepository
-    ){
-        this.trainerRepository = trainerRepository;
-    }
+    @Autowired TrainerRepository trainerRepository;
     @Override
     public Trainer getTrainerInfo(Long id) {
         return trainerRepository
@@ -49,7 +43,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public String createTrainer(CreateTrainerRequest request) {
-        if (!isValid(request)) {
+        if (!isNotValid(request)) {
             Trainer trainer = new Trainer();
             trainer.setName(request.name());
             trainer.setEmail(request.email());
@@ -60,7 +54,7 @@ public class TrainerServiceImpl implements TrainerService {
         }
     }
 
-    private boolean isValid(CreateTrainerRequest request) {
+    private boolean isNotValid(CreateTrainerRequest request) {
         return request.name().equals("") || request.email().equals("");
     }
 }
