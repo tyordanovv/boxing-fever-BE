@@ -62,17 +62,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UpdateUserRequest request) {
-        System.out.println(request.id());
-        System.out.println(request.userEmail());
-        System.out.println(request.firstName());
-        System.out.println(request.lastName());
-        System.out.println(request.address());
 
-        User user = userRepository.findByEmail(request.userEmail())
-                .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "User " + request.userEmail() + " is not found!"));
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "User " + request.email() + " is not found!"));
 
-        if (!request.userEmail().equals("")){
-            user.setEmail(request.userEmail());
+        if (!request.email().equals("")){
+            user.setEmail(request.email());
         }if (!request.firstName().equals("")){
             user.setFirstName(request.firstName());
         }if (!request.lastName().equals("")){

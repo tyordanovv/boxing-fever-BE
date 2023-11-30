@@ -39,8 +39,13 @@ public class SessionController {
 
     @PostMapping()
     public ResponseEntity<String> createSession(@RequestBody CreateSessionRequest request){
-        String str = sessionService.createSession(request);
-        return new ResponseEntity<>(str, HttpStatus.OK);
+        System.out.println(request.endHour());
+        System.out.println(request.capacity());
+        System.out.println(request.className());
+        System.out.println(request.startHour());
+        System.out.println(request.sessionDate());
+        sessionService.createSession(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

@@ -53,19 +53,18 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public String createSession(CreateSessionRequest request) {
+    public void createSession(CreateSessionRequest request) {
         Session session = new Session();
         session.setFromDate(request.startHour());
         session.setToDate(request.endHour());
         session.setCapacity(request.capacity());
         session.setSessionDate(request.sessionDate());
-        session.setTrainers(trainerService.getTrainersByIds(request.trainers()));
 
         TrainingClass trainingClass = classService.getClassByName(request.className());
+
         session.setAClass(trainingClass);
 
         sessionRepository.save(session);
-        return "Successfully created session";
     }
 
     @Override

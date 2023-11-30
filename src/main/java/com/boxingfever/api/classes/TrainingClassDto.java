@@ -19,13 +19,9 @@ public class TrainingClassDto {
 
     private Long id;
     private String name;
-
     private String place;
-
     private int durationInMinutes;
-
     private String description;
-
     private TrainingClassEnums category;
     private Set<Long> trainersIds = new HashSet<>();
 

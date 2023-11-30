@@ -9,6 +9,6 @@ import java.util.Set;
 public interface SessionService {
     List<SessionDto> getAllSessions();
     void deleteSession(Long id);
-    String createSession(CreateSessionRequest request);
+    void createSession(CreateSessionRequest request);
     void mapUserToSession(Long sessionId, Long userId);
 }
