@@ -43,7 +43,7 @@ public class TrainingClass {
             joinColumns = @JoinColumn(name = "class_id")
     )
     @Column(name = "trainer_id")
-    private Set<Long> trainers = new HashSet<>();
+    private Set<Trainer> trainers = new HashSet<>();
 
 
 }

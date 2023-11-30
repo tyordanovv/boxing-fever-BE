@@ -24,7 +24,7 @@ public class ClassController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("all-training-classes")
+    @GetMapping("all")
     public ResponseEntity<List<TrainingClass>> getClasses() {
         List<TrainingClass> response = classService.getClasses();
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -37,7 +37,7 @@ public class ClassController {
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<String> updateTrainingClass(@PathVariable Long id, @RequestBody UpdateClassRequest request) {
+    public ResponseEntity<String> updateTrainingClass(@PathVariable Long id, @RequestBody UpdateClassRequest request) { // TODO just add id to the request
         String response = classService.updateClass(id, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

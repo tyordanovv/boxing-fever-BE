@@ -1,9 +1,6 @@
 package com.boxingfever.api.classes;
 
-import com.boxingfever.entity.Trainer;
 import com.boxingfever.types.TrainingClassEnums;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.HashSet;
@@ -20,5 +17,5 @@ public class UpdateClassRequest {
     private String place;
     private String description;
     private TrainingClassEnums category;
-    private Set<Long> trainers = new HashSet<>();
+    private Set<Long> trainers;
 }

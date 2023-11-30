@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 
@@ -28,14 +29,18 @@ public class ClassServiceImpl implements ClassService {
     TrainerRepository trainerRepository;
 
     @Override
-    public String createClass(NewClassRequest newClassRequest) {
-        validateClassRequest(newClassRequest);
+    public String createClass(NewClassRequest request) {
+        validateClassRequest(request);
+
+        List<Trainer> trainers = trainerRepository.findAllById(request.getTrainers());
+
+
         TrainingClass trainingClass = TrainingClass.builder()
-                .className(newClassRequest.getClassName())
-                .category(TrainingClassEnums.valueOf(newClassRequest.getCategory()))
-                .description(newClassRequest.getDescription())
-                .trainers(newClassRequest.getTrainers())
-                .durationInMinutes(newClassRequest.getDurationInMinutes())
+                .className(request.getClassName())
+                .category(TrainingClassEnums.valueOf(request.getCategory()))
+                .description(request.getDescription())
+                .trainers((Set<Trainer>) trainers)
+                .durationInMinutes(request.getDurationInMinutes())
                 .build();
         classRepository.saveAndFlush(trainingClass);
         return "Training Class has been successfully created!";
@@ -47,11 +52,13 @@ public class ClassServiceImpl implements ClassService {
         TrainingClass existingClass = classRepository.findById(classID)
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "Class with id = " + classID + " was not found!"));
 
+        List<Trainer> trainers = trainerRepository.findAllById(updateClassRequest.getTrainers()); // TODO INFO Trainers should be fetched from the database and not passed in the JSON or saved as Long
+
         validateUpdateClassRequest(updateClassRequest);
         existingClass.setClassName(updateClassRequest.getNewClassName());
         existingClass.setCategory(TrainingClassEnums.valueOf(String.valueOf(updateClassRequest.getCategory())));
         existingClass.setDescription(updateClassRequest.getDescription());
-        existingClass.setTrainers(updateClassRequest.getTrainers());
+        existingClass.setTrainers((Set<Trainer>) trainers); // TODO not sure if this casting works, should be tested
         existingClass.setDurationInMinutes(updateClassRequest.getDurationInMinutes());
 
 
@@ -107,9 +114,9 @@ public class ClassServiceImpl implements ClassService {
         }
 
         // Validate duration in minutes
-        Integer durationInMinutes = newClassRequest.getDurationInMinutes();
+        int durationInMinutes = newClassRequest.getDurationInMinutes();
 
-        if (durationInMinutes == null || durationInMinutes <= 0) {
+        if (durationInMinutes <= 0) {
             throw new IllegalArgumentException("Duration in minutes must be a positive integer");
         }
 
@@ -120,16 +127,19 @@ public class ClassServiceImpl implements ClassService {
 
         for (Long trainerId : newClassRequest.getTrainers()) {
             Optional<Trainer> trainer = trainerRepository.findById(trainerId);
-            if (!trainer.isPresent()) {
+            if (trainer.isEmpty()) {
                 throw new TrainerNotFoundException(trainerId); // Handle invalid trainer ID
             }
         }
     }
 
+    //TODO idea was if attribute is empty just dont set it to ""
+    //now you throw a message if user leaves smth empty
+    //this works too but could be improved
     private void validateUpdateClassRequest(UpdateClassRequest updateClassRequest) {
         // Validate class name
         if (isBlank(updateClassRequest.getNewClassName())) {
-            throw new IllegalArgumentException("Class name cannot be blank");
+            throw new IllegalArgumentException("Class name cannot be blank"); // TODO IllegalArgumentException is very bad practice for web serves
         }
 
         // Validate category
@@ -145,14 +155,14 @@ public class ClassServiceImpl implements ClassService {
         }
 
         // Validate place
-        if (updateClassRequest.getPlace().isEmpty() || updateClassRequest.getPlace() == null) {
+        if (updateClassRequest.getPlace().isEmpty()) {
             updateClassRequest.setPlace("Wielandgasse 11");
         }
 
         // Validate duration in minutes
-        Integer durationInMinutes = updateClassRequest.getDurationInMinutes();
+        int durationInMinutes = updateClassRequest.getDurationInMinutes();
 
-        if (durationInMinutes == null || durationInMinutes <= 0) {
+        if (durationInMinutes <= 0) {
             throw new IllegalArgumentException("Duration in minutes must be a positive integer");
         }
 
@@ -163,8 +173,8 @@ public class ClassServiceImpl implements ClassService {
 
         for (Long trainerId : updateClassRequest.getTrainers()) {
             Optional<Trainer> trainer = trainerRepository.findById(trainerId);
-            if (!trainer.isPresent()) {
-                throw new TrainerNotFoundException(trainerId); // Handle invalid trainer ID
+            if (trainer.isEmpty()) {
+                throw new TrainerNotFoundException(trainerId); // TODO use ResourceNotFoundException or APIException
             }
         }
     }
