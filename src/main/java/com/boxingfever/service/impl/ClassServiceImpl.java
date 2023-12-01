@@ -11,9 +11,11 @@ import com.boxingfever.api.classes.NewClassRequest;
 import com.boxingfever.api.classes.UpdateClassRequest;
 import com.boxingfever.types.TrainingClassEnums;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -33,13 +35,17 @@ public class ClassServiceImpl implements ClassService {
         validateClassRequest(request);
 
         List<Trainer> trainers = trainerRepository.findAllById(request.getTrainers());
+        if (trainers.isEmpty()) {
+            throw new ApplicationContextException("There are no trainers available");
+        }
+        Set<Trainer> trainersSet = new HashSet<>(trainers);
 
 
         TrainingClass trainingClass = TrainingClass.builder()
                 .className(request.getClassName())
                 .category(TrainingClassEnums.valueOf(request.getCategory()))
                 .description(request.getDescription())
-                .trainers((Set<Trainer>) trainers)
+                .trainers(trainersSet)
                 .durationInMinutes(request.getDurationInMinutes())
                 .build();
         classRepository.saveAndFlush(trainingClass);
@@ -93,19 +99,19 @@ public class ClassServiceImpl implements ClassService {
     private void validateClassRequest(NewClassRequest newClassRequest) {
         // Validate class name
         if (isBlank(newClassRequest.getClassName())) {
-            throw new IllegalArgumentException("Class name cannot be blank");
+            throw new ApplicationContextException("Class name cannot be blank");
         }
 
         // Validate category
         try {
             TrainingClassEnums.valueOf(String.valueOf(newClassRequest.getCategory()));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid category: " + newClassRequest.getCategory(), e);
+        } catch (Exception e) {
+            throw new ApplicationContextException("Invalid category: " + newClassRequest.getCategory(), e);
         }
 
         // Validate description
         if (isBlank(newClassRequest.getDescription())) {
-            throw new IllegalArgumentException("Description cannot be blank");
+            throw new ApplicationContextException("Description cannot be blank");
         }
 
         // Validate place
@@ -117,12 +123,12 @@ public class ClassServiceImpl implements ClassService {
         int durationInMinutes = newClassRequest.getDurationInMinutes();
 
         if (durationInMinutes <= 0) {
-            throw new IllegalArgumentException("Duration in minutes must be a positive integer");
+            throw new ApplicationContextException("Duration in minutes must be a positive integer");
         }
 
         // Validate trainers
         if (newClassRequest.getTrainers() == null || newClassRequest.getTrainers().isEmpty()) {
-            throw new IllegalArgumentException("Trainers list cannot be empty");
+            throw new ApplicationContextException("Trainers list cannot be empty");
         }
 
         for (Long trainerId : newClassRequest.getTrainers()) {
@@ -139,19 +145,19 @@ public class ClassServiceImpl implements ClassService {
     private void validateUpdateClassRequest(UpdateClassRequest updateClassRequest) {
         // Validate class name
         if (isBlank(updateClassRequest.getNewClassName())) {
-            throw new IllegalArgumentException("Class name cannot be blank"); // TODO IllegalArgumentException is very bad practice for web serves
+            throw new ApplicationContextException("Class name cannot be blank"); // TODO IllegalArgumentException is very bad practice for web serves
         }
 
         // Validate category
         try {
             TrainingClassEnums.valueOf(String.valueOf(updateClassRequest.getCategory()));
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid category: " + updateClassRequest.getCategory(), e);
+            throw new ApplicationContextException("Invalid category: " + updateClassRequest.getCategory(), e);
         }
 
         // Validate description
         if (isBlank(updateClassRequest.getDescription())) {
-            throw new IllegalArgumentException("Description cannot be blank");
+            throw new ApplicationContextException("Description cannot be blank");
         }
 
         // Validate place
@@ -163,12 +169,12 @@ public class ClassServiceImpl implements ClassService {
         int durationInMinutes = updateClassRequest.getDurationInMinutes();
 
         if (durationInMinutes <= 0) {
-            throw new IllegalArgumentException("Duration in minutes must be a positive integer");
+            throw new ApplicationContextException("Duration in minutes must be a positive integer");
         }
 
         // Validate trainers
         if (updateClassRequest.getTrainers() == null || updateClassRequest.getTrainers().isEmpty()) {
-            throw new IllegalArgumentException("Trainers list cannot be empty");
+            throw new ApplicationContextException("Trainers list cannot be empty");
         }
 
         for (Long trainerId : updateClassRequest.getTrainers()) {
