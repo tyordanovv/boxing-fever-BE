@@ -37,12 +37,12 @@ public class TrainingClass {
     @Enumerated(EnumType.STRING)
     private TrainingClassEnums category;
 
-    @ManyToMany
-    @JoinTable(
+    @ElementCollection
+    @CollectionTable(
             name = "class_trainers",
-            joinColumns = @JoinColumn(name = "class_id"),
-            inverseJoinColumns = @JoinColumn(name = "trainer_id")
+            joinColumns = @JoinColumn(name = "class_id")
     )
+    @Column(name = "trainer_id")
     private Set<Trainer> trainers = new HashSet<>();
 
 

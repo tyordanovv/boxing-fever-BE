@@ -1,10 +1,8 @@
 package com.boxingfever.controller;
 
 import com.boxingfever.api.classes.NewClassRequest;
-import com.boxingfever.api.classes.TrainingClassDto;
 import com.boxingfever.api.classes.UpdateClassRequest;
 import com.boxingfever.entity.TrainingClass;
-import com.boxingfever.mapper.TrainingClassMapper;
 import com.boxingfever.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,12 +25,12 @@ public class ClassController {
     }
 
     @GetMapping("all")
-    public List<TrainingClassDto> getAllTrainingClasses() {
-        List<TrainingClass> trainingClasses = classService.getClasses();
-        return TrainingClassMapper.INSTANCE.toDtoList(trainingClasses);
+    public ResponseEntity<List<TrainingClass>> getClasses() {
+        List<TrainingClass> response = classService.getClasses();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-        @PostMapping()
+    @PostMapping()
     public ResponseEntity<String> createTrainingClass(@RequestBody NewClassRequest request) {
         String response = classService.createClass(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
