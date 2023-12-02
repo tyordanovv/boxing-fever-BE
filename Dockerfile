@@ -1,5 +1,5 @@
 # Use the official OpenJDK base image
-FROM openjdk:17-alpine
+FROM bellsoft/liberica-runtime-container:jdk-17-glibc
 
 # Set the working directory
 WORKDIR /app
