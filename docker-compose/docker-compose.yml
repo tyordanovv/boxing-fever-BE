@@ -1,19 +1,30 @@
-version: '3.1'
+version: '3'
 
 services:
   boxing-fever-db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: RnfWJHmL9u
-      MYSQL_DATABASE: sql11664765
-      MYSQL_USER: sql11664765
-      MYSQL_PASSWORD: RnfWJHmL9u
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: boxingfever
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
+    networks:
+      - app-network
+  flyway:
+    image: flyway/flyway:latest
+    container_name: flyway
+    environment:
+      FLYWAY_URL: jdbc:mysql://192.168.240.2:3306/boxingfever
     volumes:
-      - ./docker/mysql/init-scripts:/docker-entrypoint-initdb.d
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-
+      - ./flyway-conf:/flyway/conf
+      - ./docker/db/migration:/flyway/sql
+    command: [ "-url=jdbc:mysql://localhost:3306/boxingfever", "-user=user", "-password=password", "-connectRetries=60",  "migrate" ]
+    depends_on:
+      - boxing-fever-db
+    networks:
+      - app-network
   app:
     image: boxing-fever
     build:
@@ -22,3 +33,10 @@ services:
       - "8080:8080"
     depends_on:
       - boxing-fever-db
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+
+

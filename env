@@ -1,0 +1,8 @@
+DATABASE_URL=jdbc:mysql://localhost:3306/boxingfever
+DATABASE_USER=user
+DATABASE_PASSWORD=password
+
+
+POSTGRES_DB=my_database
+POSTGRES_SCHEMA=my_schema
+POSTGRES_PORT=5432
