@@ -2,7 +2,9 @@ package com.boxingfever.controller;
 
 import com.boxingfever.api.session.CreateSessionRequest;
 import com.boxingfever.api.session.SessionDto;
+import com.boxingfever.api.session.UpdateSessionRequest;
 import com.boxingfever.api.trainer.CreateTrainerRequest;
+import com.boxingfever.api.user.UpdateUserRequest;
 import com.boxingfever.entity.Trainer;
 import com.boxingfever.service.SessionService;
 import com.boxingfever.service.TrainerService;
@@ -51,6 +53,12 @@ public class SessionController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteSession(@PathVariable Long id){
         sessionService.deleteSession(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<?> updateSession(@RequestBody UpdateSessionRequest request){
+        sessionService.updateSession(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
