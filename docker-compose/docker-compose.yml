@@ -10,9 +10,13 @@ services:
       MYSQL_PASSWORD: jaCZYzRpPU
     ports:
       - "3306:3306"
+<<<<<<< Updated upstream
     volumes:
       - ./docker/mysql/init-scripts:/docker-entrypoint-initdb.d
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+=======
+
+>>>>>>> Stashed changes
 
   app:
     image: boxing-fever

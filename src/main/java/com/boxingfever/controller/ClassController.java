@@ -33,9 +33,9 @@ public class ClassController {
     }
 
     @PostMapping()
-    public List<TrainingClassDto> getAllTrainingClasses() {
-        List<TrainingClass> trainingClasses = classService.getClasses();
-        return TrainingClassMapper.INSTANCE.toDtoList(trainingClasses);
+    public ResponseEntity<String> createTrainingClass(@RequestBody NewClassRequest request) {
+        String response = classService.createClass(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("update/{id}")
