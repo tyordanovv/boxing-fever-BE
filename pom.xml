@@ -100,6 +100,10 @@
 			<version>1.4.2.Final</version> <!-- Use the same version as mapstruct -->
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
