@@ -4,25 +4,10 @@ services:
   boxing-fever-db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: jaCZYzRpPU
-      MYSQL_DATABASE: sql11667105
-      MYSQL_USER: sql11667105
-      MYSQL_PASSWORD: jaCZYzRpPU
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: boxingfever
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
-<<<<<<< Updated upstream
-    volumes:
-      - ./docker/mysql/init-scripts:/docker-entrypoint-initdb.d
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-=======
 
->>>>>>> Stashed changes
-
-  app:
-    image: boxing-fever
-    build:
-      context: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      - boxing-fever-db

@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS `sql11667105`;
+CREATE DATABASE IF NOT EXISTS `boxingfever`;
 
 -- Use the extreme-loving database
-USE `sql11667105`;
+USE `boxingfever`;

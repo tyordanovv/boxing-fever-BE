@@ -24,7 +24,7 @@ public class TrainingClass {
     @Column(name = "class_name", nullable = false)
     private String className;
 
-    @Column(name = "address", nullable = true)
+    @Column(name = "place", nullable = true)
     private String place;
 
     @Column(name = "duration_in_minutes", nullable = false, columnDefinition = "INT DEFAULT 0")
