@@ -4,10 +4,10 @@ services:
   boxing-fever-db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: RnfWJHmL9u
-      MYSQL_DATABASE: sql11664765
-      MYSQL_USER: sql11664765
-      MYSQL_PASSWORD: RnfWJHmL9u
+      MYSQL_ROOT_PASSWORD: jaCZYzRpPU
+      MYSQL_DATABASE: sql11667105
+      MYSQL_USER: sql11667105
+      MYSQL_PASSWORD: jaCZYzRpPU
     ports:
       - "3306:3306"
     volumes:
