@@ -1,7 +1,9 @@
 package com.boxingfever.service.impl;
 
 import com.boxingfever.api.trainer.CreateTrainerRequest;
+import com.boxingfever.api.trainer.UpdateTrainerRequest;
 import com.boxingfever.entity.Trainer;
+import com.boxingfever.entity.User;
 import com.boxingfever.exception.APIException;
 import com.boxingfever.repository.TrainerRepository;
 import com.boxingfever.service.TrainerService;
@@ -29,6 +31,18 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public Set<Trainer> getTrainersByIds(List<Long> trainerIds) {
         return new HashSet<>(trainerRepository.findAllById(trainerIds));
+    }
+
+    @Override
+    public void updateTrainer(UpdateTrainerRequest request) {
+        Trainer trainer = trainerRepository.findById(request.id())
+                .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "Trainer " + request.email() + " is not found!"));
+
+        if (!request.email().equals("")){
+            trainer.setEmail(request.email());
+        }if (!request.name().equals("")){
+            trainer.setName(request.name());
+        }
     }
 
     @Override

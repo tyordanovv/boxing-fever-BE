@@ -1,6 +1,8 @@
 package com.boxingfever.service;
 
 import com.boxingfever.api.trainer.CreateTrainerRequest;
+import com.boxingfever.api.trainer.UpdateTrainerRequest;
+import com.boxingfever.api.user.UpdateUserRequest;
 import com.boxingfever.api.user.UserInfoDto;
 import com.boxingfever.entity.Trainer;
 
@@ -13,4 +15,5 @@ public interface TrainerService {
     void deleteTrainer(Long id);
     String createTrainer(CreateTrainerRequest request);
     Set<Trainer> getTrainersByIds(List<Long> trainerIds);
+    void updateTrainer(UpdateTrainerRequest request);
 }

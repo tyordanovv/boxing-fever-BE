@@ -1,6 +1,8 @@
 package com.boxingfever.controller;
 
 import com.boxingfever.api.trainer.CreateTrainerRequest;
+import com.boxingfever.api.trainer.UpdateTrainerRequest;
+import com.boxingfever.api.user.UpdateUserRequest;
 import com.boxingfever.api.user.UserInfoDto;
 import com.boxingfever.entity.Trainer;
 import com.boxingfever.service.TrainerService;
@@ -42,6 +44,12 @@ public class TrainerController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id){
         trainerService.deleteTrainer(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateTrainerRequest request){
+        trainerService.updateTrainer(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
