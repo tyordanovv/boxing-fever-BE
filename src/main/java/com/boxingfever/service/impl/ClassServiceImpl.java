@@ -31,7 +31,7 @@ public class ClassServiceImpl implements ClassService {
     TrainerRepository trainerRepository;
 
     @Override
-    public String createClass(NewClassRequest request) {
+    public TrainingClass createClass(NewClassRequest request) {
         validateClassRequest(request);
 
         List<Trainer> trainers = trainerRepository.findAllById(request.getTrainers());
@@ -45,32 +45,37 @@ public class ClassServiceImpl implements ClassService {
                 .className(request.getClassName())
                 .category(TrainingClassEnums.valueOf(request.getCategory()))
                 .description(request.getDescription())
+                .place(request.getPlace())
                 .trainers(trainersSet)
                 .durationInMinutes(request.getDurationInMinutes())
                 .build();
         classRepository.saveAndFlush(trainingClass);
-        return "Training Class has been successfully created!";
+        return trainingClass;
     }
 
     @Override
-    public String updateClass(Long classID, UpdateClassRequest updateClassRequest) {
+    public TrainingClass updateClass(Long classID, UpdateClassRequest updateClassRequest) {
         // Retrieve the existing class from the database
         TrainingClass existingClass = classRepository.findById(classID)
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "Class with id = " + classID + " was not found!"));
 
-        List<Trainer> trainers = trainerRepository.findAllById(updateClassRequest.getTrainers()); // TODO INFO Trainers should be fetched from the database and not passed in the JSON or saved as Long
+        List<Trainer> trainers = trainerRepository.findAllById(updateClassRequest.getTrainers());
+        if (trainers.isEmpty()) {
+            throw new ApplicationContextException("There are no trainers available");
+        }
+        Set<Trainer> trainersSet = new HashSet<>(trainers);
 
-        validateUpdateClassRequest(updateClassRequest);
         existingClass.setClassName(updateClassRequest.getNewClassName());
         existingClass.setCategory(TrainingClassEnums.valueOf(String.valueOf(updateClassRequest.getCategory())));
         existingClass.setDescription(updateClassRequest.getDescription());
-        existingClass.setTrainers((Set<Trainer>) trainers); // TODO not sure if this casting works, should be tested
+        existingClass.setPlace(updateClassRequest.getPlace());
+        existingClass.setTrainers(trainersSet); // TODO not sure if this casting works, should be tested
         existingClass.setDurationInMinutes(updateClassRequest.getDurationInMinutes());
 
 
         // Save the updated class
         classRepository.saveAndFlush(existingClass);
-        return "Successfully updated the training class!";
+        return existingClass;
     }
 
     @Override
@@ -139,48 +144,46 @@ public class ClassServiceImpl implements ClassService {
         }
     }
 
-    //TODO idea was if attribute is empty just dont set it to ""
-    //now you throw a message if user leaves smth empty
-    //this works too but could be improved
-    private void validateUpdateClassRequest(UpdateClassRequest updateClassRequest) {
+
+    private void validateUpdateRequest(UpdateClassRequest updateRequest) {
         // Validate class name
-        if (isBlank(updateClassRequest.getNewClassName())) {
-            throw new ApplicationContextException("Class name cannot be blank"); // TODO IllegalArgumentException is very bad practice for web serves
+        if (isBlank(updateRequest.getNewClassName())) {
+            throw new ApplicationContextException("Class name cannot be blank");
         }
 
         // Validate category
         try {
-            TrainingClassEnums.valueOf(String.valueOf(updateClassRequest.getCategory()));
+            TrainingClassEnums.valueOf(String.valueOf(updateRequest.getCategory()));
         } catch (IllegalArgumentException e) {
-            throw new ApplicationContextException("Invalid category: " + updateClassRequest.getCategory(), e);
+            throw new ApplicationContextException("Invalid category: " + updateRequest.getCategory(), e);
         }
 
         // Validate description
-        if (isBlank(updateClassRequest.getDescription())) {
+        if (isBlank(updateRequest.getDescription())) {
             throw new ApplicationContextException("Description cannot be blank");
         }
 
         // Validate place
-        if (updateClassRequest.getPlace().isEmpty()) {
-            updateClassRequest.setPlace("Wielandgasse 11");
+        if (updateRequest.getPlace().isEmpty()) {
+            updateRequest.setPlace("Wielandgasse 11");
         }
 
         // Validate duration in minutes
-        int durationInMinutes = updateClassRequest.getDurationInMinutes();
+        int durationInMinutes = updateRequest.getDurationInMinutes();
 
         if (durationInMinutes <= 0) {
             throw new ApplicationContextException("Duration in minutes must be a positive integer");
         }
 
         // Validate trainers
-        if (updateClassRequest.getTrainers() == null || updateClassRequest.getTrainers().isEmpty()) {
+        if (updateRequest.getTrainers() == null || updateRequest.getTrainers().isEmpty()) {
             throw new ApplicationContextException("Trainers list cannot be empty");
         }
 
-        for (Long trainerId : updateClassRequest.getTrainers()) {
+        for (Long trainerId : updateRequest.getTrainers()) {
             Optional<Trainer> trainer = trainerRepository.findById(trainerId);
             if (trainer.isEmpty()) {
-                throw new TrainerNotFoundException(trainerId); // TODO use ResourceNotFoundException or APIException
+                throw new TrainerNotFoundException(trainerId); // Handle invalid trainer ID
             }
         }
     }
