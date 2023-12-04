@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ClassService {
 
-    String createClass(NewClassRequest newClassRequest);
-    String updateClass(Long classID, UpdateClassRequest updateClassRequest);
+    TrainingClass createClass(NewClassRequest newClassRequest);
+    TrainingClass updateClass(Long classID, UpdateClassRequest updateClassRequest);
     void deleteClass(Long classId);
     TrainingClass getClassByName(String name);
     List<TrainingClass> getClasses();

@@ -2,6 +2,7 @@ package com.boxingfever.service.impl;
 
 import com.boxingfever.api.session.CreateSessionRequest;
 import com.boxingfever.api.session.SessionDto;
+import com.boxingfever.api.session.UpdateSessionRequest;
 import com.boxingfever.entity.Session;
 import com.boxingfever.entity.Trainer;
 import com.boxingfever.entity.TrainingClass;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,6 +80,17 @@ public class SessionServiceImpl implements SessionService {
         sessionRepository.save(session);
     }
 
+    @Override
+    public void updateSession(UpdateSessionRequest request) {
+        Session session = sessionRepository.findById(request.id())
+                .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "Session " + request.id() + " is not found!"));
+
+        if (!Objects.equals(request.capacity(), 0)) {
+            session.setCapacity(request.capacity());
+        }
+        sessionRepository.save(session);
+
+    }
     private SessionDto convertToDto(Session session) {
         return new SessionDto(
                 session.getId(),
