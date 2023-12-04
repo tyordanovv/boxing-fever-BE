@@ -33,14 +33,14 @@ public class ClassController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> createTrainingClass(@RequestBody NewClassRequest request) {
-        String response = classService.createClass(request);
+    public ResponseEntity<TrainingClass> createTrainingClass(@RequestBody NewClassRequest request) {
+        TrainingClass response = classService.createClass(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<String> updateTrainingClass(@PathVariable Long id, @RequestBody UpdateClassRequest request) { // TODO just add id to the request
-        String response = classService.updateClass(id, request);
+    public ResponseEntity<TrainingClass> updateTrainingClass(@PathVariable Long id, @RequestBody UpdateClassRequest request) {
+        TrainingClass response = classService.updateClass(id, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
